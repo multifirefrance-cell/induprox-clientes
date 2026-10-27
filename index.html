@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>INDUPROX · Acceso clientes</title>
 <style>
 :root { --bg:#EDF0F2; --ink:#14202B; --muted:#586976; --line:#D3DAE0; --accent:#B3261E; }
@@ -45,8 +45,8 @@ a.card:hover { transform: translateY(-2px); }
 <script>
 (function () {
   'use strict';
-  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "v91y/WpuhTfa8gMVMUGcshxnS0Xp94NicFhtDwQSkcgXt8g1lOCib+jWm8gBPIVAOPamNLq7vW19X03uDUcdHevaHry2wRl3DGYbjswM38P8RiA4XNL5Vf1I262/dFeJKpJEbgdBr+3oz77diDKiM5viVU7MfexRLnpB5ItVCkBge5fQbifktrg/hUbixH1ZXF6ygm3j2v2d4mS9qgHy0wfYpwTpRYSOrDIakDuUFRQnW7kYm0BflECewwXSN/kzTg+Nnl+YCLH/MO25ftry3YmenC/hy9vgPZG1LiocGSnZohBPvrNSnrQrHr0R861kx2o="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "MbkYx+LuILT5hCjM+lUFT7PjaL8pZpbw6FO5d66NPNn0tw2vzJ4ZmGHtVUO9CNTJPke/5SV5WfXSvZAeo0ymAvJFgvPnT7gM9oL+8hEgr5Bo9n3N97LCIRs/B4wRAkJj/jmiXTFLYGFwqT26FZcaSYPPm3ZRf8ixV2z/BrpigRnhSOqm6+/sxQNZpM0g3M4BlShsQ5jSnh7jdfjeqQS1R9YzQTwvzHtbeG1rPNOW6Mq74RZiA/RgjBuSTVZRJco46yjCKZdgFyCQdLqybvVvn+oQ1mGes18EC6zV8AFP/ez5n2731MVUdwiBfp+a3xhlVA=="}];
-  var SESSION_KEY = 'induprox-portal';
+  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "zPcyRHr996wh8fm4zCDHDVpRqBpq4AM5CgUl3jM5VgEICkSLfaX+c7U8A8Y7229rkmgFASNPh8cNF/4v3yOl+w9RkO6qhkkJYkJidAjllf+2PXD3gLTXGg8B5TczdmQAxgpqYb6ir8GmVJoXDPgX43brI1wmPaET1wJ80pi3lViPHNYxGB1N6KQ+9xGkCBw5PyI4W4D3puyO8WXZN23rX/a2lQ/VEiQjfw9VvKN7bd5U7xFh5AlMRZyRYY5gtm7wf6U0sZw7mlBf1LJCQ1Pt3AO9KgAd+9iANuNrOivL9tzn6qXmmRFh4NM/2wzTh7UJvTQ="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "MkXAu3Nu2MtFOpJESkcZ/KP/4IHKLPyMFrwHfnz7QViofrYMqmBLbBazsguBmNI+d/JJH+ZwPzpo26nxOAbxg3sxD0b6KXUZNyN2c+KqmTGLnW5RGxUxrJmQq/9e433M69ml+RJD73W5FwNXOs9y35+QRcKjJXZ1C7hyL5cI2Mn4SGK/SE+1y2FS2Rfm5G0sa8dHBEU+fWJrp3/fe1EDzRD8y382KZGyu65uMMJ24xzWUAx3NC+6qmdxj8q1W39iyEo1j0hL5yUUEZrejhx+aZZmfR7MXI07M91P3cUEiJioI7MGLuCHkd1KLoOEB9uHzQ=="}];
+  var SESSION_KEY = 'induprox-portal', TTL = 8 * 3600 * 1000;   // la sesión caduca a las 8 horas
   var AREAS = [
     { k: 'incendios', no: '01', t: 'Equipos contra incendios', d: 'Extintores, sistemas de detección y equipos de protección contra incendios, con documentación técnica y certificación de producto emitida por organismos reconocidos conforme a criterios ISO/CASCO.', c: 'c1' },
     { k: 'proteccion', no: '02', t: 'Protección y seguridad', d: 'Equipos de protección personal, señalización y soluciones de seguridad industrial conforme a estándares internacionales.', c: 'c2' },
@@ -78,7 +78,7 @@ a.card:hover { transform: translateY(-2px); }
   }
   function startSession(mf, n, khex) {
     try {
-      localStorage.setItem(SESSION_KEY, JSON.stringify({ n: n, k: khex }));
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ n: n, k: khex, t: Date.now() }));
       Object.keys(mf.cks).forEach(function (d) { localStorage.setItem('inx-ck:' + d, mf.cks[d]); });
       localStorage.setItem(mf.authKey, mf.hash);
     } catch (e) { }
@@ -118,9 +118,10 @@ a.card:hover { transform: translateY(-2px); }
   logout.addEventListener('click', function () { clearSession(); showLogin(); });
   (async function () {
     var s = null; try { s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { }
-    if (s && USERS[s.n]) {
+    if (s && USERS[s.n] && s.t && Date.now() - s.t < TTL) {
       try { startSession(await openManifest(USERS[s.n], fromHex(s.k)), s.n, s.k); return; } catch (e) { clearSession(); }
     }
+    if (s) clearSession();
     showLogin();
   })();
 })();

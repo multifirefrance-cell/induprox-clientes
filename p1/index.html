@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>INDUPROX</title></head>
 <body style="font:15px system-ui,sans-serif;margin:24px;color:#586976"><p id="m">Abriendo…</p>
 <script>
@@ -13,8 +13,9 @@
     location.replace('../');
   }
   try {
-    var ck = localStorage.getItem('inx-ck:' + AREA);
-    if (!ck) { back('Debe iniciar sesión.'); return; }
+    var ck = localStorage.getItem('inx-ck:' + AREA), ses = null;
+    try { ses = JSON.parse(localStorage.getItem('induprox-portal') || 'null'); } catch (e) { }
+    if (!ck || !ses || !ses.t || Date.now() - ses.t > 8 * 3600 * 1000) { back('Debe iniciar sesión.'); return; }
     var buf = await (await fetch('data.enc', { cache: 'no-store' })).arrayBuffer();
     var key = await crypto.subtle.importKey('raw', fromHex(ck), 'AES-GCM', false, ['decrypt']);
     var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(buf, 0, 12) }, key, buf.slice(12));
