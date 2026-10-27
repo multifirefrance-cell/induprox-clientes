@@ -47,7 +47,7 @@ a.card:hover { transform: translateY(-2px); }
 <script>
 (function () {
   'use strict';
-  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "d279MjXZJs+ux7rrqPzdMLTcjIUDNk04TiF2yRUIYc8AboJw5Di3N45PT18/LOvqie9OQvVZFVsCSbKXdgfwqk52oKzK3wPz6LSePMEs+wUh/iy3hZkqBzbe3YEJysCCXbPQ9Vhm/x7HrrEF70nkDSmC94WI2FnhBJBanwjZ8X4Y8sdFZducb69KhEb/O4+cP/NEcSyAR8JNSzshdRS0eCxu6Qt5Bsa0C5IF5/Bkwsyx2+tGaKcv/KqCk4Di0/GHIBVojaNxu75aT9SKjgTbpscdSmKmU4jsbISBBvzEKBCk/ezG1bbnnWraTtpee9s7VpYnGLgtfVKw6vvef+Z34rV72jmqjYw="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "v0vAx+trEPqYUlw/1t0Q3awUHkRRek0Sp+rjtJAgBkAkU/WguJSfpOXvuhJJ4bFByMis7kFlPPiqWzRbIECL13fNB6NnJGR53Fue/S74MqiDNjVOhvwTZ4kwkvPeoXK/AxpWSAaHAx4BqQNI+cwE9uzLNpQDfbq+6HWuHqHCeHOzT5V9TaCS9cdnem5M/IIJZtGsG/wCQHMk8EQ6V0LbPbjPsiKxe0RXEp7W+Ktu2yRwWLIo1DWJutKzMhh7OGKP2L2cNZGMMSWursPKBN3vvEzf/4pCLakfARgfmXY1VemxoWqBHDWOKnr0/mD5B+uQbCFbtM8kwqJn/QbYCiq/x9dG2w=="}];
+  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "4HmyM8X2t4Q6ICcR1HCRcqqFYFBO+08wa1tHAMIegbX5IJDe5LKJOxeihdsA3+Dod988DKwHSV/8HwUItBkih1h1RJuKw+mEaDaWpkSM4eUC5KN0OytfaR9jH/u7qVwPMwFe0wX2VEzyd6KYdal9r8nKXFgpqstU8gzWl1XFesVBWMgfPuCk0UGG9H3ZeOyFL59JcqGgJVDI08t5IzwQe32T0B6Cr3XYqYHSwUBGRtpjCM93NbE2zi+EiFTppPpVs+CprkYFZaFbwzZa2xsqyETB0kbn+wOCiWC5vVi7yQAq1pirMMSp+VyWnlnMJJ/dOcTUJ6hNMcvOWXaQ7ANDNx81ztvQ9ro="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "4NMysn3furVGNFDIprEzvke5E19uhfH3wRQDJZpfGA8SbtVEz36PTvGGOJ9ch98aIsro4ym2jZQWqpY9OXMzAgQGa63uT7tVV5xHqqWR/bnwsEaE2tELi5pwxIdF4L04OiNdxFLsFW44IMtpCsZSw/o3GCk7PSIv48KTEYvOoYSv/6CQxw1GFyqTtR5s0n0KIqWciLJr6hbCxV5fSwSSAxDD3Rk4IKI5kfZvopMmIPA8rWH7nZouC+Gynea9dKWf1cKfV4kU0Vedexkp6YQDuBi403Qu12qJejGPuQZ7DP2VCKg01a2Sto7v+HTo6/Ls0lf090Z2NX6T4D7uE0+CtWzRqQ=="}];
   var SESSION_KEY = 'induprox-portal', TTL = 8 * 3600 * 1000;   // la sesión caduca a las 8 horas
   var AREAS = [
     { k: 'incendios', no: '01', t: 'Equipos contra incendios', d: 'Extintores, sistemas de detección y equipos de protección contra incendios, con documentación técnica y certificación de producto emitida por organismos reconocidos conforme a criterios ISO/CASCO.', c: 'c1' },
@@ -85,6 +85,8 @@ a.card:hover { transform: translateY(-2px); }
       Object.keys(mf.cks).forEach(function (d) { localStorage.setItem('inx-ck:' + d, mf.cks[d]); });
       localStorage.setItem(mf.authKey, mf.hash);
     } catch (e) { }
+    var g = /#go=(\w+)/.exec(location.hash);          // viene de una página de pedidos que necesitaba renovar su llave
+    if (g && mf.cks[g[1]]) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { } location.replace(g[1] + '/'); return; }
     showAreas(mf);
   }
   function showAreas(mf) {
