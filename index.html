@@ -47,7 +47,7 @@ a.card:hover { transform: translateY(-2px); }
 <script>
 (function () {
   'use strict';
-  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "4HmyM8X2t4Q6ICcR1HCRcqqFYFBO+08wa1tHAMIegbX5IJDe5LKJOxeihdsA3+Dod988DKwHSV/8HwUItBkih1h1RJuKw+mEaDaWpkSM4eUC5KN0OytfaR9jH/u7qVwPMwFe0wX2VEzyd6KYdal9r8nKXFgpqstU8gzWl1XFesVBWMgfPuCk0UGG9H3ZeOyFL59JcqGgJVDI08t5IzwQe32T0B6Cr3XYqYHSwUBGRtpjCM93NbE2zi+EiFTppPpVs+CprkYFZaFbwzZa2xsqyETB0kbn+wOCiWC5vVi7yQAq1pirMMSp+VyWnlnMJJ/dOcTUJ6hNMcvOWXaQ7ANDNx81ztvQ9ro="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "4NMysn3furVGNFDIprEzvke5E19uhfH3wRQDJZpfGA8SbtVEz36PTvGGOJ9ch98aIsro4ym2jZQWqpY9OXMzAgQGa63uT7tVV5xHqqWR/bnwsEaE2tELi5pwxIdF4L04OiNdxFLsFW44IMtpCsZSw/o3GCk7PSIv48KTEYvOoYSv/6CQxw1GFyqTtR5s0n0KIqWciLJr6hbCxV5fSwSSAxDD3Rk4IKI5kfZvopMmIPA8rWH7nZouC+Gynea9dKWf1cKfV4kU0Vedexkp6YQDuBi403Qu12qJejGPuQZ7DP2VCKg01a2Sto7v+HTo6/Ls0lf090Z2NX6T4D7uE0+CtWzRqQ=="}];
+  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "paYmZ8shjKIDuZpoyAacTjZHf41ZxfecHzv8lw44rWUjQ3qUzrp/mPJD9uYJ8dDbKqEAmXiJwhaO9J9Hr+x/OW2+eQhxXEWIgDzPG/Y0xKITHvt//v8Ga+jIAuOEQOVYpkpLvihbyXwb7VVI7XddNsM7y6E/8p/dEPQ6MYaWrCyNquQAq0i55kRkTBgII2CKYhgwf8Y3Uf2g4LCviJGYqLFLaTtHGNruhtI31GNrNLkXHKleC4iqHv8OfXlNTYmnti+eyW3M5oMXG+GbYkV/d9Lwj5vF3vd05gp3G55fOcOWaRw/4fJptgeG/791rxEwksQjX1IJanjLkdl29I4k"}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "LEwjjguvBs84QdNXXaZUcdk6Clr7+9q6Bo15nKKKdTqqCBPkhKeYWxSSbtIRmtErmaFPAN7hvnAtCm4P6mEX1yF0ojLt1++eCkizJ6YaBchR6hWBrOnpbN36w7Lm6PLZccSI7eZlFfWWVTi5orCakq4tBYQ8UiwkOnHak4M2H7lmpZ1JYPWbXLcgm0bBbNTeCsEFQmp1PjPAvRvh+xm5Da3SLsqNjB0ouO2hfM63acnUxT4zwaBye0QY0Ij+Ln571xiSuuhZjClhDtoIcGE/SToknksT7N6KG4KXQuUntM4rkCtQuDtCCetHAdj+IcGNUfi65mh6FNWhjxM="}, {"s": "bd89dc89b65ae0a681582788a47ebf96", "i": 250000, "m": "opPaCdvT8Dk4J7kx3PAu/MdPT0hw6iH3ZkVzZk8MXs2VouaAYgWOhEtHQk9gvSMdWi9rjpRy/4Swi01AWFIYoG/67+F1ZRAEe3uNSc9qYMG0eUB3BrsWymSWtI8nzsA0g2Lj83QE/A5G/jwvSAhZEbQhAOK1Edb2K4IrTNiH88zPcmF71luVj/+XiMJO0XC7ZI2VVgHuI1eccbM4eCSR5RAqKl31SGlepepIgLsmyKGSYYEGFwovUaHuv+TkkD7urIKbFb+4vPgwE+LzNZ5xHoGnw+QvcWs7Ssoy/JMT3VqszxK5q/6hv3Sz8r90OPiLPo+GC/L7y3Du6AtMYQBViZf6V5sdJUYvDzmfTGeJ51PVtUYGy94GqpW3okWuAjU3xZ/siMoqaof43yPUFsE8uPJyqMm4TXFACLQ/ZLXbNXq5yKXbnggWxeqYOsvvqbWzkwQIUu/ERUFEhCJbmFID3wivab8HQ0+IT57yEmpPoEhAvFUi713MePmW7k/sIe4kziqZYRVYd7pm2f6nGRgouz8FFgpa4nHq9KA2xmHNQeO6AZlxoOEX77stp00="}];
   var SESSION_KEY = 'induprox-portal', TTL = 8 * 3600 * 1000;   // la sesión caduca a las 8 horas
   var AREAS = [
     { k: 'incendios', no: '01', t: 'Equipos contra incendios', d: 'Extintores, sistemas de detección y equipos de protección contra incendios, con documentación técnica y certificación de producto emitida por organismos reconocidos conforme a criterios ISO/CASCO.', c: 'c1' },
@@ -83,7 +83,7 @@ a.card:hover { transform: translateY(-2px); }
     try {
       localStorage.setItem(SESSION_KEY, JSON.stringify({ n: n, k: khex, t: Date.now() }));
       Object.keys(mf.cks).forEach(function (d) { localStorage.setItem('inx-ck:' + d, mf.cks[d]); });
-      localStorage.setItem(mf.authKey, mf.hash);
+      Object.keys(mf.auths || {}).forEach(function (k) { localStorage.setItem(k, mf.auths[k]); });
     } catch (e) { }
     var g = /#go=(\w+)/.exec(location.hash);          // viene de una página de pedidos que necesitaba renovar su llave
     if (g && mf.cks[g[1]]) { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { } location.replace(g[1] + '/'); return; }
