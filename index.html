@@ -38,6 +38,7 @@ a.card:hover { transform: translateY(-2px); }
 <div class="wrap">
   <header>
     <div class="logo"><img src="logo.png" alt="INDUPROX" style="height:52px;width:auto;display:block;margin-bottom:2px"><small>Acceso clientes</small></div>
+    <span id="who" style="margin-left:auto;margin-right:12px;color:var(--muted);font-size:14px" hidden></span>
     <button class="link" id="logout" hidden>Salir</button>
   </header>
   <main id="app"></main>
@@ -45,7 +46,7 @@ a.card:hover { transform: translateY(-2px); }
 <script>
 (function () {
   'use strict';
-  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "zPcyRHr996wh8fm4zCDHDVpRqBpq4AM5CgUl3jM5VgEICkSLfaX+c7U8A8Y7229rkmgFASNPh8cNF/4v3yOl+w9RkO6qhkkJYkJidAjllf+2PXD3gLTXGg8B5TczdmQAxgpqYb6ir8GmVJoXDPgX43brI1wmPaET1wJ80pi3lViPHNYxGB1N6KQ+9xGkCBw5PyI4W4D3puyO8WXZN23rX/a2lQ/VEiQjfw9VvKN7bd5U7xFh5AlMRZyRYY5gtm7wf6U0sZw7mlBf1LJCQ1Pt3AO9KgAd+9iANuNrOivL9tzn6qXmmRFh4NM/2wzTh7UJvTQ="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "MkXAu3Nu2MtFOpJESkcZ/KP/4IHKLPyMFrwHfnz7QViofrYMqmBLbBazsguBmNI+d/JJH+ZwPzpo26nxOAbxg3sxD0b6KXUZNyN2c+KqmTGLnW5RGxUxrJmQq/9e433M69ml+RJD73W5FwNXOs9y35+QRcKjJXZ1C7hyL5cI2Mn4SGK/SE+1y2FS2Rfm5G0sa8dHBEU+fWJrp3/fe1EDzRD8y382KZGyu65uMMJ24xzWUAx3NC+6qmdxj8q1W39iyEo1j0hL5yUUEZrejhx+aZZmfR7MXI07M91P3cUEiJioI7MGLuCHkd1KLoOEB9uHzQ=="}];
+  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "9W3rkLFcTonRyFNOU1sGJZKIDpDVH65M1Iz+LVQdAnrD/vw/1R6qXoBoNFH48y6O1VYo8FeFlLJyZT4Dr8a9wBVR0XvGjFRMGOCtywRCZFzK89glcajuMw38I7zNEpCYx3Fzj2tvQx9NcyTL5pELcD4fmIqlMDaaLeXWd4TNs9GIU/Fr+mxjTxE4cBdySsxEnD0OuUaqLzycdUoovN2iXI7fksmGmQJqZyPv9mLOHYUVkYiZMb7Oznbip8A+eBazwmjOPhyXkwOrB1si84gwCQ4+onnIPOrxPvqe9bDlqgE5/9oqp22Ak9ZrpC7z5K2dfu/R9chmrRb2WeIwSbyeOFjy9e5gz80="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "/obE1vuzElk93cQYvjwfiss1LpZBq91GBh+O4VzYggu7O5fuD/3N4e8+I6RUph2KvEjMInzZKLRGAklMzEkn4nKUW53+NBIVWN51n9ina5XsHRix/9qE+3HEyS8MEJoWAEKhxta6lB9lM02JDfMrrjliIGWbomHXKk3xIO8qQZmJSMmpCsa0FC8g7OULV4Fa3NlLKBOF3DUUZCE5yMCw6e72e8SnkbTn+gEM2gNbCvbnEdU2omPbBjVEB5Dq2m+JokjNUT52eb5hp8AHpzR5bbujSNwe/9jp3/4xsrYKtat9r08eLrZGa1r63+ljtatUnOGmkVV3LA9/+3EkIu6d21S+gg=="}];
   var SESSION_KEY = 'induprox-portal', TTL = 8 * 3600 * 1000;   // la sesión caduca a las 8 horas
   var AREAS = [
     { k: 'incendios', no: '01', t: 'Equipos contra incendios', d: 'Extintores, sistemas de detección y equipos de protección contra incendios, con documentación técnica y certificación de producto emitida por organismos reconocidos conforme a criterios ISO/CASCO.', c: 'c1' },
@@ -54,6 +55,7 @@ a.card:hover { transform: translateY(-2px); }
     { k: 'vial', no: '04', t: 'Seguridad vial', d: 'Señalización, demarcación y dispositivos de control de tránsito para vías, accesos industriales, estacionamientos y zonas de obra, conforme a normativa vigente según aplicación.', c: 'c4' }
   ];
   var app = document.getElementById('app'), logout = document.getElementById('logout');
+  var who = document.getElementById('who');
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
   var enc = function (s) { return new TextEncoder().encode(s); };
   function toHex(b) { return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); }
@@ -86,6 +88,7 @@ a.card:hover { transform: translateY(-2px); }
   }
   function showAreas(mf) {
     logout.hidden = false;
+    who.textContent = 'Conectado como ' + (mf.name || ''); who.hidden = !mf.name;
     var cards = AREAS.map(function (a) {
       var url = mf.areas[a.k];
       var inner = '<span class="no">' + a.no + '</span><h2>' + esc(a.t) + '</h2><p>' + esc(a.d) + '</p><span class="go">' + (url ? 'Ver línea →' : 'Próximamente') + '</span>';
@@ -94,7 +97,7 @@ a.card:hover { transform: translateY(-2px); }
     app.innerHTML = '<h1>Elija el área con la que desea trabajar</h1><p class="hint">Seleccione una línea para preparar su pedido.</p><div class="cards">' + cards + '</div>';
   }
   function showLogin() {
-    logout.hidden = true;
+    logout.hidden = true; who.hidden = true;
     app.innerHTML = '<form class="login" id="lf"><h1>Acceso clientes</h1><p class="hint" style="margin-bottom:18px">Ingrese con su usuario y contraseña</p>' +
       '<label>Usuario<input id="lgUser" autocomplete="username" autocapitalize="none" required></label>' +
       '<label>Contraseña<input id="lgPass" type="password" autocomplete="current-password" required></label>' +
