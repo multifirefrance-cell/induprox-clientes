@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>html{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>INDUPROX · Acceso clientes</title>
+<style>
+:root { --bg:#EDF0F2; --ink:#14202B; --muted:#586976; --line:#D3DAE0; --accent:#B3261E; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 15px; line-height: 1.45; padding: 0 16px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 20px 0 56px; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 26px; }
+.logo { font-weight: 800; font-size: 24px; letter-spacing: .06em; }
+.logo small { display: block; font-weight: 500; font-size: 12px; letter-spacing: .02em; color: var(--muted); }
+.link { background: none; border: 0; color: var(--accent); font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: underline; padding: 6px; }
+h1 { margin: 0 0 6px; font-size: 28px; line-height: 1.15; }
+.hint { color: var(--muted); margin: 0 0 22px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.card { position: relative; display: flex; flex-direction: column; min-height: 300px; padding: 22px 20px 18px; border-radius: 16px; color: #fff; text-decoration: none; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+.card .no { font-size: 13px; opacity: .85; margin-bottom: 14px; }
+.card h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.12; }
+.card p { margin: 0; font-size: 14px; line-height: 1.5; opacity: .95; flex: 1; }
+.card .go { margin-top: 16px; text-align: center; font-weight: 700; font-size: 15px; }
+.c1 { background: linear-gradient(160deg, #7a1c1c, #c0392b); }
+.c2 { background: linear-gradient(160deg, #163a73, #2f62b3); }
+.c3 { background: linear-gradient(160deg, #1f2429, #4a525a); }
+.c4 { background: linear-gradient(160deg, #1d2126, #3a3f45); }
+.c4 h2, .c4 .no { color: #f2c200; }
+.c4 .go { color: #f2c200; }
+a.card:hover { transform: translateY(-2px); }
+.card.off { filter: grayscale(.85) brightness(.9); opacity: .6; cursor: default; }
+.card.off .go { font-weight: 600; }
+.login { max-width: 340px; margin: 60px auto 0; background: #fff; border: 1px solid #d8dce1; border-radius: 12px; padding: 28px 24px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+.login h1 { font-size: 22px; }
+.login label { display: block; margin-bottom: 12px; }
+.login input { display: block; width: 100%; margin-top: 4px; padding: 10px; font-size: 16px; border: 1px solid #b8c0c8; border-radius: 8px; }
+.login button[type=submit] { width: 100%; padding: 11px; font-size: 16px; border: 0; border-radius: 8px; background: var(--accent); color: #fff; cursor: pointer; }
+.login button:disabled { opacity: .6; }
+#err { min-height: 20px; color: #b3261e; margin-bottom: 8px; }
+</style>
+<div class="wrap">
+  <header>
+    <div class="logo"><img src="logo.png" alt="INDUPROX" style="height:52px;width:auto;display:block;margin-bottom:2px"><small>Acceso clientes</small></div>
+    <button class="link" id="logout" hidden>Salir</button>
+  </header>
+  <main id="app"></main>
+</div>
+<script>
+(function () {
+  'use strict';
+  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "Q4Z0BpdGWq2t9DAJw3bb/ENKIkBEZ4SPFIGkw4plZeK+5yZIIHs3A0fIXe15n5rbW6jPRSnWQC+PjfCuEHAjTzVlKySTvgHBLFNZ4TKvRICNCTvOrTSuuZHGQuCg/Lw+43LRDyIt1yLy0pEZrmrsqvcRYNPuKfmebYIW6G3AQpkkfhtCnq7f14ZHuTsA/vyofou9bPrcvN/taHKL1ev+PnRQAzwRbgoNbEK5BoFQRDr0Czg/m5o/Knul+Ll2+88rPoIrKKzrGndtpGvqNoC4cMQpo01PmcEcSzA6f0CDXGoYOz5CYyR2Od+ikuDd0bBQErM="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "8FYPK3e9dFPxwMJyTw4q1gskI0ig8mBGsZqHgudCq3vcFVwlOA8/4xSdizJdnn8i5uArZgs9sNRPHJAjokKoHiI+Gi0+skfygYjQ86iJ4RTm101YF86RAEd6LuFIaNvdnqzBfUhYlhsw/b32WfGjOt7qnNUy44KEWAj6mOefAI6NHsVGNX9x3cIq/ZmIJe30Ynn1/PK/Of1Plm2f75BimMSxBVtCCzCYX++KxD+G9p/asocxNqJo8kMoQOPtw/dHCBH017Pbp/ZoGoXVMJk4G5cKGJlGtBBo2W+ikOSkzavYTc3XJudrHtmSeU2Cl4O97A=="}];
+  var SESSION_KEY = 'induprox-portal';
+  var AREAS = [
+    { k: 'incendios', no: '01', t: 'Equipos contra incendios', d: 'Extintores, sistemas de detección y equipos de protección contra incendios, con documentación técnica y certificación de producto emitida por organismos reconocidos conforme a criterios ISO/CASCO.', c: 'c1' },
+    { k: 'proteccion', no: '02', t: 'Protección y seguridad', d: 'Equipos de protección personal, señalización y soluciones de seguridad industrial conforme a estándares internacionales.', c: 'c2' },
+    { k: 'industrial', no: '03', t: 'Suministro industrial', d: 'Componentes, herramientas y consumibles industriales para operación y mantenimiento, con opciones de fabricación bajo marca propia y respaldo técnico-documental por producto.', c: 'c3' },
+    { k: 'vial', no: '04', t: 'Seguridad vial', d: 'Señalización, demarcación y dispositivos de control de tránsito para vías, accesos industriales, estacionamientos y zonas de obra, conforme a normativa vigente según aplicación.', c: 'c4' }
+  ];
+  var app = document.getElementById('app'), logout = document.getElementById('logout');
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var enc = function (s) { return new TextEncoder().encode(s); };
+  function toHex(b) { return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); }
+  function fromHex(h) { var a = new Uint8Array(h.length / 2); for (var i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; }
+  function fromB64(s) { var bin = atob(s), a = new Uint8Array(bin.length); for (var i = 0; i < a.length; i++) a[i] = bin.charCodeAt(i); return a; }
+  function norm(s) { return String(s).replace(/[\s-]/g, '').toUpperCase(); }
+  async function deriveKey(u, user, pw) {
+    var k = await crypto.subtle.importKey('raw', enc(norm(user) + '\n' + norm(pw)), 'PBKDF2', false, ['deriveBits']);
+    return new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: fromHex(u.s), iterations: u.i }, k, 256));
+  }
+  async function openManifest(u, kbytes) {
+    var ak = await crypto.subtle.importKey('raw', kbytes, 'AES-GCM', false, ['decrypt']);
+    var buf = fromB64(u.m);
+    var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, ak, buf.slice(12));
+    return JSON.parse(new TextDecoder().decode(plain));
+  }
+  function clearSession() {
+    try {
+      localStorage.removeItem(SESSION_KEY); localStorage.removeItem('ord-auth'); localStorage.removeItem('ped-auth');
+      Object.keys(localStorage).forEach(function (k) { if (k.indexOf('inx-ck:') === 0) localStorage.removeItem(k); });
+    } catch (e) { }
+  }
+  function startSession(mf, n, khex) {
+    try {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ n: n, k: khex }));
+      Object.keys(mf.cks).forEach(function (d) { localStorage.setItem('inx-ck:' + d, mf.cks[d]); });
+      localStorage.setItem(mf.authKey, mf.hash);
+    } catch (e) { }
+    showAreas(mf);
+  }
+  function showAreas(mf) {
+    logout.hidden = false;
+    var cards = AREAS.map(function (a) {
+      var url = mf.areas[a.k];
+      var inner = '<span class="no">' + a.no + '</span><h2>' + esc(a.t) + '</h2><p>' + esc(a.d) + '</p><span class="go">' + (url ? 'Ver línea →' : 'Próximamente') + '</span>';
+      return url ? '<a class="card ' + a.c + '" href="' + esc(url) + '">' + inner + '</a>' : '<div class="card off ' + a.c + '" aria-disabled="true">' + inner + '</div>';
+    }).join('');
+    app.innerHTML = '<h1>Elija el área con la que desea trabajar</h1><p class="hint">Seleccione una línea para preparar su pedido.</p><div class="cards">' + cards + '</div>';
+  }
+  function showLogin() {
+    logout.hidden = true;
+    app.innerHTML = '<form class="login" id="lf"><h1>Acceso clientes</h1><p class="hint" style="margin-bottom:18px">Ingrese con su usuario y contraseña</p>' +
+      '<label>Usuario<input id="lgUser" autocomplete="username" autocapitalize="none" required></label>' +
+      '<label>Contraseña<input id="lgPass" type="password" autocomplete="current-password" required></label>' +
+      '<div id="err" role="alert"></div><button type="submit">Ingresar</button></form>';
+    var err = document.getElementById('err');
+    if (!(window.crypto && crypto.subtle)) { err.textContent = 'Este navegador no puede abrir la página de forma segura. Use un navegador actual.'; return; }
+    document.getElementById('lgUser').focus();
+    document.getElementById('lf').addEventListener('submit', async function (ev) {
+      ev.preventDefault();
+      var btn = document.querySelector('.login button[type=submit]'); btn.disabled = true; err.textContent = 'Verificando…';
+      var user = document.getElementById('lgUser').value, pw = document.getElementById('lgPass').value, found = null;
+      for (var i = 0; i < USERS.length && !found; i++) {
+        try { var kb = await deriveKey(USERS[i], user, pw); found = { mf: await openManifest(USERS[i], kb), n: i, k: toHex(kb) }; } catch (e) { }
+      }
+      if (found) { startSession(found.mf, found.n, found.k); return; }
+      err.textContent = 'Usuario o contraseña incorrectos.';
+      await new Promise(function (r) { setTimeout(r, 800); });
+      btn.disabled = false; document.getElementById('lgPass').value = ''; document.getElementById('lgPass').focus();
+    });
+  }
+  logout.addEventListener('click', function () { clearSession(); showLogin(); });
+  (async function () {
+    var s = null; try { s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { }
+    if (s && USERS[s.n]) {
+      try { startSession(await openManifest(USERS[s.n], fromHex(s.k)), s.n, s.k); return; } catch (e) { clearSession(); }
+    }
+    showLogin();
+  })();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>INDUPROX</title></head>
+<body style="font:15px system-ui,sans-serif;margin:24px;color:#586976"><p id="m">Abriendo…</p>
+<script>
+(async function () {
+  var AREA = 'p1', m = document.getElementById('m');
+  function fromHex(h) { var a = new Uint8Array(h.length / 2); for (var i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; }
+  function back(msg) {
+    var last = 0; try { last = +sessionStorage.getItem('inx-try') || 0; } catch (e) { }
+    if (Date.now() - last < 15000) { m.innerHTML = msg + ' <a href="../">Volver al acceso de clientes</a>'; return; }
+    try { sessionStorage.setItem('inx-try', String(Date.now())); } catch (e) { }
+    location.replace('../');
+  }
+  try {
+    var ck = localStorage.getItem('inx-ck:' + AREA);
+    if (!ck) { back('Debe iniciar sesión.'); return; }
+    var buf = await (await fetch('data.enc', { cache: 'no-store' })).arrayBuffer();
+    var key = await crypto.subtle.importKey('raw', fromHex(ck), 'AES-GCM', false, ['decrypt']);
+    var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(buf, 0, 12) }, key, buf.slice(12));
+    var html = new TextDecoder().decode(plain);
+    document.open(); document.write(html); document.close();
+  } catch (e) { back('No se pudo abrir la página.'); }
+})();
+</script></body></html>
