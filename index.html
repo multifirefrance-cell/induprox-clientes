@@ -18,14 +18,15 @@ h1 { margin: 0 0 6px; font-size: 28px; line-height: 1.15; }
 .card h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.12; }
 .card p { margin: 0; font-size: 14px; line-height: 1.5; opacity: .95; flex: 1; }
 .card .go { margin-top: 16px; text-align: center; font-weight: 700; font-size: 15px; }
-.c1 { background: linear-gradient(160deg, #7a1c1c, #c0392b); }
-.c2 { background: linear-gradient(160deg, #163a73, #2f62b3); }
-.c3 { background: linear-gradient(160deg, #1f2429, #4a525a); }
-.c4 { background: linear-gradient(160deg, #1d2126, #3a3f45); }
+.c1, .c2, .c3, .c4 { background-size: cover; background-position: center; background-color: #1d2126; }
+.c1 { background-image: linear-gradient(rgba(160,28,21,.65), rgba(160,28,21,.65)), url(bg/incendios.webp); }
+.c2 { background-image: linear-gradient(rgba(12,80,180,.65), rgba(12,80,180,.65)), url(bg/proteccion.webp); }
+.c3 { background-image: linear-gradient(rgba(26,42,60,.65), rgba(26,42,60,.65)), url(bg/suministro.webp); }
+.c4 { background-image: linear-gradient(rgba(12,24,40,.62), rgba(12,24,40,.62)), url(bg/vial.webp); }
 .c4 h2, .c4 .no { color: #f2c200; }
 .c4 .go { color: #f2c200; }
 a.card:hover { transform: translateY(-2px); }
-.card.off { filter: grayscale(.85) brightness(.9); opacity: .6; cursor: default; }
+.card.off { filter: grayscale(.55) brightness(.95); opacity: .78; cursor: default; }
 .card.off .go { font-weight: 600; }
 .login { max-width: 340px; margin: 60px auto 0; background: #fff; border: 1px solid #d8dce1; border-radius: 12px; padding: 28px 24px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
 .login h1 { font-size: 22px; }
@@ -46,7 +47,7 @@ a.card:hover { transform: translateY(-2px); }
 <script>
 (function () {
   'use strict';
-  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "9W3rkLFcTonRyFNOU1sGJZKIDpDVH65M1Iz+LVQdAnrD/vw/1R6qXoBoNFH48y6O1VYo8FeFlLJyZT4Dr8a9wBVR0XvGjFRMGOCtywRCZFzK89glcajuMw38I7zNEpCYx3Fzj2tvQx9NcyTL5pELcD4fmIqlMDaaLeXWd4TNs9GIU/Fr+mxjTxE4cBdySsxEnD0OuUaqLzycdUoovN2iXI7fksmGmQJqZyPv9mLOHYUVkYiZMb7Oznbip8A+eBazwmjOPhyXkwOrB1si84gwCQ4+onnIPOrxPvqe9bDlqgE5/9oqp22Ak9ZrpC7z5K2dfu/R9chmrRb2WeIwSbyeOFjy9e5gz80="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "/obE1vuzElk93cQYvjwfiss1LpZBq91GBh+O4VzYggu7O5fuD/3N4e8+I6RUph2KvEjMInzZKLRGAklMzEkn4nKUW53+NBIVWN51n9ina5XsHRix/9qE+3HEyS8MEJoWAEKhxta6lB9lM02JDfMrrjliIGWbomHXKk3xIO8qQZmJSMmpCsa0FC8g7OULV4Fa3NlLKBOF3DUUZCE5yMCw6e72e8SnkbTn+gEM2gNbCvbnEdU2omPbBjVEB5Dq2m+JokjNUT52eb5hp8AHpzR5bbujSNwe/9jp3/4xsrYKtat9r08eLrZGa1r63+ljtatUnOGmkVV3LA9/+3EkIu6d21S+gg=="}];
+  var USERS = [{"s": "b7342ccb0d405028b734943a91ea8ae1", "i": 250000, "m": "7I8ZwHY12Qp1y/fuZ5kiDCtgtmo4Iu+yyMl9vpNSyIlCQitlmsMxTT2fSqgHViuFBQjxoRk089fbENAzJxPn4g95zjx3aY/rnjfj/3B6B7OZMn2QzYbxhpW4EgGaaJ6fiHOOBDrKE7oXZoAIYDXnvG+Gs2HV6JVRl7JhCBDQsLl/eFa+HXjg86P5P0STqbTWqZymst02Kf20YJ4TfQASjU5TpqZxnsr4MmhjoA/udXoA45I7pzdf4fENbASMI6zRj5XyL9knUJrEMusUA+9etV3ZhuHaEiMxFG+dJBIzbAmxSyjJwgIi9vxHh7xnHvjiVTYb/w4iOf14pJzN1Qwy8NctKfWk3bE="}, {"s": "0cf319f61ab67f27e70b9874046c4271", "i": 250000, "m": "Rq/ZaQqe5qIqZWhV/XtPF8Ky/nC+h9dMfOK6mdJD5CoMe+IuwUyu0P+Cx7PVYO2p1f3mOMrsZmCDE2cVCL2SXG59W2nt4bCxA+Us65Z5pqFjOVN23puDyM4yuyrzipSq9m2Q2oh5meflV2IDrksWgQK9D3ZdJlwVoUJr6SpmbZA+q+8w1fpM+IuG3DpKFoHBBkiMCX+xwxOVQWDgfqFfY6w+pjNn3E6tH9dnVwO8GwX2W99Pw+7BrX7q+KjIbioLfnSUJeaX576qYhFE9RkQv29DwiL/W420cyECEW2tiuJEDF1+P+nlkWMcMZnVLbA2P9WFSo/kMapRacRYm/D4eFAs0A=="}];
   var SESSION_KEY = 'induprox-portal', TTL = 8 * 3600 * 1000;   // la sesión caduca a las 8 horas
   var AREAS = [
     { k: 'incendios', no: '01', t: 'Equipos contra incendios', d: 'Extintores, sistemas de detección y equipos de protección contra incendios, con documentación técnica y certificación de producto emitida por organismos reconocidos conforme a criterios ISO/CASCO.', c: 'c1' },
